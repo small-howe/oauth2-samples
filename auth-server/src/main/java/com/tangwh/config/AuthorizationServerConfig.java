@@ -103,6 +103,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                .redirectUris("http:localhost:8082/index.html");
     }
 
+
     /**
      * 端点的信息
      * @param endpoints
