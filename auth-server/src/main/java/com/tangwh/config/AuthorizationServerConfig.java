@@ -99,8 +99,10 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                .authorizedGrantTypes("authorization_code","refresh_token")
                // 客户端 授权范围
                .scopes("all")
+               // 授权自动批准 不用询问是否授权
+               .autoApprove(true)
                // 授权完成之后 的一个地址 重定向
-               .redirectUris("http:localhost:8082/index.html");
+               .redirectUris("http://localhost:8082/index.html");
     }
 
 
