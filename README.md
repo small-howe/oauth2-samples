@@ -1,4 +1,10 @@
 # 相关文章 ©江南一点雨 
+
+|  模块           | 意义     |
+|  ----          | ----     |
+| auth-server    | 授权服务器 |
+| user-server    | 资源服务器 |
+| clicent-app    | 第三方应用 |
 ### [做微服务绕不过的 OAuth2，松哥也来和大家扯一扯](https://mp.weixin.qq.com/s/AELXf1nmpWbYE3NINpLDRg)
 ### [这个案例写出来，还怕跟面试官扯不明白 OAuth2 登录流程？](https://mp.weixin.qq.com/s/GXMQI59U6uzmS-C0WQ5iUw)
 ### [死磕 OAuth2，教练我要学全套的！](https://mp.weixin.qq.com/s/33Oxu6YMjwco3WRE07_IiQ)
