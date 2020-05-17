@@ -3,6 +3,7 @@ package com.tangwh.config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
@@ -62,7 +63,7 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         // 生成的Token保存在哪里
         services.setTokenStore(tokenStore);
         // 有效期 2个小时
-        services.setAccessTokenValiditySeconds(60 *60 *2);
+        services.setAccessTokenValiditySeconds(60 * 60 * 2);
         // 刷新Toeken 时间 7天
         services.setRefreshTokenValiditySeconds(60 *60 *21 *7);
         return services;
@@ -96,16 +97,27 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                // 资源id
                .resourceIds("res1")
                // 四种授权的模式 --  authorization_code 授权码模式  refresh_token 刷新token 会用到
-               .authorizedGrantTypes("authorization_code","refresh_token")
+               //"implicit" 简化模式的配置
+               //"password" 密码模式
+               //"client_credentials" 客户端模式
+               .authorizedGrantTypes("authorization_code", "refresh_token", "implicit", "password","client_credentials")
                // 客户端 授权范围
                .scopes("all")
                // 授权自动批准 不用询问是否授权
                .autoApprove(true)
-               // 授权完成之后 的一个地址 重定向
-               .redirectUris("http://localhost:8082/index.html");
+               // 授权完成之后 的一个地址 重定向(授权码模式的地址)
+//               .redirectUris("http://localhost:8082/index.html");
+               // 授权完成之后 的一个地址 重定向 (简化模式的地址)
+//               .redirectUris("http://localhost:8082/index.html");
+//               http://localhost:8082/01.html静态页面 http://localhost:8082/02.html动态页面(密码配置模式)
+               .redirectUris("http://localhost:8082/01.html","http://localhost:8082/02.html");
     }
 
-
+    /**
+     * 密码模式必须用到 配置  前提 需要在Security提供一下
+     */
+    @Autowired
+    AuthenticationManager authenticationManager;
     /**
      * 端点的信息
      * @param endpoints
@@ -114,10 +126,14 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     @Override
     public void configure(final AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 
-        // 配置授权码
-        endpoints.authorizationCodeServices(authorizationCodeServices())
+
+        endpoints.
+                // 配置授权码模式
+                authorizationCodeServices(authorizationCodeServices())
                 /// 令牌
-                .tokenStore(tokenStore);
+                .tokenStore(tokenStore)
+                // 密码模式配置
+               .authenticationManager(authenticationManager);
 
 
     }
