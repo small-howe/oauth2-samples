@@ -3,8 +3,13 @@
 | 模块                 |   端口        |    意义                          |
 |  ----               |   ----       | ----                             |
 | auth-server         |  8080        |    授权服务器(腾讯的QQ授权登录)      |
-| user-server         |  8081        |    资源服务器                      |
+| user-server         |  8081        |    资源服务器(登录成功后要访问的资源)                      |
 | clicent-app         |  8082        |    第三方应用(自己的应用)            |
+
+### 授权码模式流程
+* 顺序 自己应用 --> 授权服务器——>授权服务器验证密码 成功后-->自己应用 返回一个 授权码
+     *  通过 授权码 获取到令牌 拿到令牌可以取--> 资源服务器 获取数据
+     *  // 后台处理 授权码 模式
 ### [做微服务绕不过的 OAuth2，松哥也来和大家扯一扯](https://mp.weixin.qq.com/s/AELXf1nmpWbYE3NINpLDRg)
 ### [这个案例写出来，还怕跟面试官扯不明白 OAuth2 登录流程？](https://mp.weixin.qq.com/s/GXMQI59U6uzmS-C0WQ5iUw)
 ### [死磕 OAuth2，教练我要学全套的！](https://mp.weixin.qq.com/s/33Oxu6YMjwco3WRE07_IiQ)
