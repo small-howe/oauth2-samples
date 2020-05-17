@@ -1,9 +1,12 @@
 package com.tangwh.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.InMemoryTokenStore;
+import org.springframework.security.oauth2.provider.token.store.redis.RedisTokenStore;
 
 /**
  * Token
@@ -11,14 +14,19 @@ import org.springframework.security.oauth2.provider.token.store.InMemoryTokenSto
 @Configuration
 public class AcessTokenConfig {
 
+
+    @Autowired
+    RedisConnectionFactory redisConnectionFactory;
     /**
-     * Token保存在内存中
+     * Token(令牌)保存在内存中  return new InMemoryTokenStore();
      * @return
+     *  存在redis中 RedisTokenStore
      */
     @Bean
     TokenStore tokenStore(){
-
-        return new InMemoryTokenStore();
-
+ //保存在内存中
+//        return new InMemoryTokenStore();
+        // 存在redis中
+        return new RedisTokenStore(redisConnectionFactory);
     }
 }
