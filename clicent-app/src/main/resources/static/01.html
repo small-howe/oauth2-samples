@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简化模式登录</title>
+    <script src="/js/jquery-3.4.1.min.js"></script>
+
+</head>
+<body>
+
+你好: TangHowe
+<!-- 传递客户端id 和响应类型(返回令牌) scope all redirect_url重定向地址-->
+<a
+        href="http://localhost:8080/oauth/authorize?client_id=javaboy&response_type=token&scope=all&redirect_url=http://localhost:8082/01.html">第三方登录简化模式</a>
+
+<div id="result"></div>
+<!-- 登录成功后 返回 http://localhost:8082/01.html#access_token=d1e0373d-e813-4192-b79d-d3d5f5b8f1ca&token_type=bearer&expires_in=43199-->
+<!-- 提取 accesstoken-->
+<script>
+    /**
+     * #access_token=d1e0373d-e813-4192-b79d-d3d5f5b8f1ca&token_type=bearer&expires_in=43199
+     * @type {string}
+     * 获取access_tolken  放入请求头 进行资源服务器请求
+     */
+    var hash = window.location.hash;
+    if (hash && hash.length > 0) {
+        //    使用 & 分割 从 第一个开始
+        var params = hash.substring(1).split("&");
+        var token = params[0].split("=");
+        $.ajax({
+            type:'get',
+            headers:{
+                'Authorization':'Bearer'+token[1]
+            },
+            url:'http://localhost:8081/hello',
+            success: function (data) {
+             $("#result").html(data);
+            }
+        });
+    }
+</script>
+</body>
+</html>

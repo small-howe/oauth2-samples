@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>第三方授权登录</title>
+</head>
+<body>
+<!--  授权服务器地址  传递 参数  客户端id  响应的数据类型 是code(授权码)拿到授权码 获取 asseToken 拿到 asstoken 获取相应的资源  -->
+<a href="http://localhost:8080/oauth/authorize?client_id=javaboy&response_type=token&scope=all&redirect_uri=http://localhost:8082/index.html">第三方登录（简化模式）</a>
+
+<h1 th:text="${msg}"></h1>
+</body>
+</html>

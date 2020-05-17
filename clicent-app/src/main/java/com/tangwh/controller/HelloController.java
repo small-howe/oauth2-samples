@@ -26,6 +26,7 @@ public class HelloController {
     /**
      * 顺序 自己应用 --> 授权服务器——>授权服务器验证密码 成功后-->自己应用 返回一个 授权码
      *  通过 授权码 获取到令牌 拿到令牌可以取--> 资源服务器 获取数据
+     *  // 后台处理 授权码 模式
      * @param code
      * @param model
      * @return
