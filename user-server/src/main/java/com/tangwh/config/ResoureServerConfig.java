@@ -54,7 +54,9 @@ public class ResoureServerConfig extends ResourceServerConfigurerAdapter {
         http.authorizeRequests()
                 .antMatchers("/admin/**").hasRole("admin")
                 // 其他的 都是 登录成功后就能访问的
-                .anyRequest().authenticated();
+                .anyRequest().authenticated()
+                //支持跨域
+                .and().cors();
 
     }
 }
