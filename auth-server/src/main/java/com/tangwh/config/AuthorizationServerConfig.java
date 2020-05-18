@@ -14,11 +14,11 @@ import org.springframework.security.oauth2.provider.ClientDetailsService;
 import org.springframework.security.oauth2.provider.client.JdbcClientDetailsService;
 import org.springframework.security.oauth2.provider.code.AuthorizationCodeServices;
 import org.springframework.security.oauth2.provider.code.InMemoryAuthorizationCodeServices;
-import org.springframework.security.oauth2.provider.token.AuthorizationServerTokenServices;
-import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
-import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import javax.sql.DataSource;
+import java.util.Arrays;
 
 /**
  * 授权服务器
@@ -62,11 +62,23 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
     PasswordEncoder passwordEncoder;
 
     /**
+     * UUID变成 jwt格式 工具
+     */
+   @Autowired
+    JwtAccessTokenConverter jwtAccessTokenConverter;
+
+    /**
+     * jwt 返回信息数据增加
+     */
+   @Autowired
+    MyAdditionalInformation myAdditionalInformation;
+    /**
      * 配置token 服务
      * 比如 令牌有效期限  存在哪里  刷新令牌有效期
      */
     @Bean
     AuthorizationServerTokenServices tokenServices(){
+        // 生成token
         DefaultTokenServices services = new DefaultTokenServices();
         // 之前是写死 现在是存在数据库中
 //        services.setClientDetailsService(clientDetailsService);
@@ -75,11 +87,18 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
         services.setSupportRefreshToken(true);
         // 生成的Token保存在哪里
         services.setTokenStore(tokenStore);
+        // jwt配置  UUID 变成jwt 增强功能
+        TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+        // 转换工具1
+        tokenEnhancerChain.setTokenEnhancers(Arrays.asList(jwtAccessTokenConverter,myAdditionalInformation));
+
+        services.setTokenEnhancer(tokenEnhancerChain);
         // 关于客户端信息 存在数据库中 所以自己就不用设置
 //        // 有效期 2个小时
 //        services.setAccessTokenValiditySeconds(60 * 60 * 2);
 //        // 刷新Toeken 时间 7天
 //        services.setRefreshTokenValiditySeconds(60 *60 *21 *7);
+
         return services;
 
     }
@@ -152,10 +171,12 @@ public class AuthorizationServerConfig extends AuthorizationServerConfigurerAdap
                 // 配置授权码模式
                 authorizationCodeServices(authorizationCodeServices())
                 /// 令牌
-                .tokenStore(tokenStore)
+                .tokenServices(tokenServices())
                 // 密码模式配置
                .authenticationManager(authenticationManager);
 
 
     }
+
+
 }

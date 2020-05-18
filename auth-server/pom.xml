@@ -32,12 +32,12 @@
             <groupId>org.springframework.cloud</groupId>
             <artifactId>spring-cloud-starter-security</artifactId>
         </dependency>
-<!-- token 令牌存入redis中-->
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-data-redis</artifactId>
+<!--&lt;!&ndash; token 令牌存入redis中&ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>org.springframework.boot</groupId>-->
+<!--            <artifactId>spring-boot-starter-data-redis</artifactId>-->
 
-        </dependency>
+<!--        </dependency>-->
 <!--        授权服务器 的客户端信息保存在数据库中-->
         <dependency>
             <groupId>org.springframework.boot</groupId>
