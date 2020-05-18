@@ -1,5 +1,6 @@
 package com.tangwh.config;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -7,6 +8,7 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.ResourceServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.ResourceServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
 
 /**
  * 资源服务器
@@ -16,21 +18,24 @@ import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
 @EnableResourceServer
 public class ResoureServerConfig extends ResourceServerConfigurerAdapter {
 
+
+// 资源服务器 拿到jwt解析获取到用户的信息
+    @Autowired
+    TokenStore tokenStore;
     // 远程 TokenServer 校验 如果用jwt 就不需要远程
-
-    @Bean
-    RemoteTokenServices tokenServices() {
-        RemoteTokenServices services = new RemoteTokenServices();
-
-        //用户从资源服务器拿数据 传递token  检测token 对不对
-        services.setCheckTokenEndpointUrl("http://localhost:8080/oauth/check_token");
-
-        // 连接 需要 客户端的信息 id 和密码
-        services.setClientId("javaboy");
-        services.setClientSecret("123");
-
-        return services;
-    }
+//    @Bean
+//    RemoteTokenServices tokenServices() {
+//        RemoteTokenServices services = new RemoteTokenServices();
+//
+//        //用户从资源服务器拿数据 传递token  去授权服务器检测token 对不对
+//        services.setCheckTokenEndpointUrl("http://localhost:8080/oauth/check_token");
+//
+//        // 连接 需要 客户端的信息 id 和密码
+//        services.setClientId("javaboy");
+//        services.setClientSecret("123");
+//
+//        return services;
+//    }
 
 
     /**
@@ -41,7 +46,9 @@ public class ResoureServerConfig extends ResourceServerConfigurerAdapter {
     @Override
     public void configure(final ResourceServerSecurityConfigurer resources) throws Exception {
         // 资源id 在 授权服务器上 配置多少 这个就是多少
-      resources.resourceId("res1").tokenServices(tokenServices());
+//      resources.resourceId("res1").tokenServices(tokenServices());
+        //使用jwt后的配置
+        resources.resourceId("res1").tokenStore(tokenStore);
     }
 
     /**
